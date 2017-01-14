@@ -236,7 +236,7 @@
             self.sortTasks();
 
         } else {
-            console.log("Sorry, your browser does not support Web Storage...");
+            alert("Sorry, your browser does not support Web Storage...");
         }
     }
 
@@ -246,7 +246,7 @@
         if (typeof(localStorage) != "undefined") {
             localStorage.setItem('tasks', JSON.stringify(self._tasks));
         } else {
-            console.log("Sorry, your browser does not support Web Storage...");
+            alert("Sorry, your browser does not support Web Storage...");
         }
     }
 
