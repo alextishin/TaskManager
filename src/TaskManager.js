@@ -24,6 +24,8 @@
         var form = document.createElement('FORM');
         var btn = document.createElement('BUTTON');
         var input = document.createElement('INPUT');
+
+        form.innerHTML = '<h2>Add Task</h2>';
         
         input.className = 'task-manager__input';
         input.type = 'text';
