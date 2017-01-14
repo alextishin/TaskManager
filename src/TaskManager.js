@@ -1,5 +1,5 @@
 ;(function () {
-    'use strict';
+     'use strict';
 
     function TaskManager() {
         this._tasks = {};
@@ -25,8 +25,9 @@
         var btn = document.createElement('BUTTON');
         var input = document.createElement('INPUT');
 
+
         form.innerHTML = '<h2>Add Task</h2>';
-        
+
         input.className = 'task-manager__input';
         input.type = 'text';
         input.name = 'title';
@@ -51,7 +52,12 @@
             var value = input.value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
             var item = {id: id, title: value, isCompleted: false};
 
+
             self.addTask(item, function () {
+                //bug in mozzila
+                if(!self._tasks) self._tasks = {};
+
+
                 self._tasks[id] = item;
                 self.updateStore();
                 self.sortTasks();
@@ -88,8 +94,8 @@
     TaskManager.prototype.appendTo = function (container) {
         container.appendChild(this._template);
     }
-    
-    
+
+
     TaskManager.prototype.addTask = function (taskItem, onAfterAdd) {
         var self = this;
         var taskNode = document.createElement('LI');
@@ -97,7 +103,7 @@
         var completeBtn = document.createElement('BUTTON');
         var editBtn = document.createElement('BUTTON');
         var removeBtn = document.createElement('BUTTON');
-        
+
         taskNode.className = 'task-manager__task';
 
         taskTitle.className = 'task__title';
@@ -168,7 +174,7 @@
         //нужен полифил
         item.prepend(editContainter);
     }
-    
+
     TaskManager.prototype.removeTask = function (id, item) {
         var self = this;
 
@@ -216,7 +222,7 @@
             self._list.appendChild(itemsArray[i]);
         }
     }
-    
+
     TaskManager.prototype.loadFromStore = function () {
         var self = this;
 
