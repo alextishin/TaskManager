@@ -1,11 +1,108 @@
+body {
+    min-width: 600px;
+}
+
 .list-container {
-    border: 1px solid black;
     height: 300px;
     max-height: 300px;
     margin: 20px 0;
+    overflow: auto;
 }
 
+.task-manager__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.task-manager__input {
+    width: 400px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    padding: 0 10px;
+    border-radius: 5px;
+    height: 30px;
+    border: 1px solid #9e9c9c;
+}
+
+.task-manager__input--edit {
+    width: 360px;
+    height: 24px;
+}
+
+.task-manager__input:focus {
+    outline: none;
+    border-radius: 5px;
+    border: 2px solid #2196f3;
+}
+
+.task-manager__btn[disabled] {
+    background: #9e9c9c;
+}
+
+.task-manager__btn {
+    margin: 0 10px;
+    height: 30px;
+    border: none;
+    background: #2196f3;
+    border-radius: 5px;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.task-manager__task {
+    height: 24px;
+    padding: 5px 0;
+    display: table;
+    border-bottom: 1px solid #ddd;
+}
+
+.task-manager__task:last-child {
+    border-bottom: none;
+}
+
+.task__title {
+    padding: 0 5px;
+    width: 400px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.task__btn:focus {
+    outline: none;
+}
+
+.task__btn {
+    width: 24px;
+    height: 24px;
+    margin: 0 5px;
+    border: none;
+    background-image: url("../images/spritesheet.png");
+    background-repeat: no-repeat;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.task__btn--complete {
+    background-position: -48px 0;
+}
+
+.task__btn--edit {
+    background-position: -72px 0;
+}
+
+.task__btn--remove {
+    background-position: -24px 0;
+}
+
+.task__btn--save{
+    background-position: 0 0;
+}
 
 .edit-container {
-    display: inline-block;
+    display: flex;
+    float: left;
+    width: 400px;
+    padding: 0 5px;
 }

@@ -24,11 +24,12 @@
         var form = document.createElement('FORM');
         var btn = document.createElement('BUTTON');
         var input = document.createElement('INPUT');
-
-
+        
+        input.className = 'task-manager__input';
         input.type = 'text';
         input.name = 'title';
-        input.placeholder = 'title';
+        input.placeholder = 'Title';
+        input.maxLength = "50";
         input.oninput = input.onchange = input.onpaste = input.oncut = function (e) {
             var value = e.target.value;
 
@@ -39,13 +40,14 @@
             }
         }
 
-
+        btn.className = 'task-manager__btn';
         btn.innerHTML = 'Add';
         btn.type = 'button';
         btn.disabled = true;
         btn.addEventListener('click', function () {
-            var id = self.getTaskCount() + 1;
-            var item = {id: id, title: input.value, isCompleted: false};
+            var id = new Date().valueOf();
+            var value = input.value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            var item = {id: id, title: value, isCompleted: false};
 
             self.addTask(item, function () {
                 self._tasks[id] = item;
@@ -84,18 +86,7 @@
     TaskManager.prototype.appendTo = function (container) {
         container.appendChild(this._template);
     }
-
-    TaskManager.prototype.getTaskCount = function () {
-        var self = this;
-        var count = 0;
-
-        for(var key in self._tasks) {
-            if(self._tasks.hasOwnProperty(key))
-                count++;
-        }
-
-        return count;
-    }
+    
     
     TaskManager.prototype.addTask = function (taskItem, onAfterAdd) {
         var self = this;
@@ -104,14 +95,20 @@
         var completeBtn = document.createElement('BUTTON');
         var editBtn = document.createElement('BUTTON');
         var removeBtn = document.createElement('BUTTON');
+        
+        taskNode.className = 'task-manager__task';
 
+        taskTitle.className = 'task__title';
         taskTitle.innerHTML = taskItem.title;
-        completeBtn.className = 'task-btn--complete';
-        editBtn.className = 'task-btn--edit';
-        removeBtn.className = 'task-btn--complete';
+        completeBtn.className = 'task__btn task__btn--complete';
+        editBtn.className = 'task__btn task__btn--edit';
+        removeBtn.className = 'task__btn task__btn--remove';
 
         completeBtn.addEventListener('click', function () {
-            self.markAsComplete(taskItem.id, taskNode);
+            self.markAsComplete(taskNode, function () {
+                self._tasks[taskItem.id].isCompleted = true;
+                self.updateStore();
+            });
         });
 
         editBtn.addEventListener('click', function () {
@@ -126,6 +123,9 @@
         taskNode.appendChild(completeBtn);
         taskNode.appendChild(editBtn);
         taskNode.appendChild(removeBtn);
+
+        if(taskItem.isCompleted)
+            self.markAsComplete(taskNode);
 
         self._list.appendChild(taskNode);
 
@@ -146,10 +146,13 @@
 
         title.style.display = 'none';
 
+        input.className = 'task-manager__input task-manager__input--edit'
         input.value = title.innerText;
+
+        btn.className = 'task__btn task__btn--save';
         btn.addEventListener('click', function () {
             title.innerHTML = input.value;
-            title.style.display = 'inline-block';
+            title.style.display = 'table-cell';
             item.removeChild(editContainter);
 
             self._tasks[id].title = input.value;
@@ -160,6 +163,7 @@
         editContainter.appendChild(input);
         editContainter.appendChild(btn);
 
+        //нужен полифил
         item.prepend(editContainter);
     }
     
@@ -172,8 +176,20 @@
         self.updateStore();
     }
 
-    TaskManager.prototype.markAsComplete = function (id, item) {
-        console.log(arguments)
+    TaskManager.prototype.markAsComplete = function (item, afterComplete) {
+        var btns = item.querySelectorAll('button');
+
+        item.style.backgroundColor = 'rgba(70, 185, 80, 0.5)';
+
+        btns[0].disabled = true;
+        btns[1].disabled = true;
+
+        btns[0].style.backgroundImage = 'none';
+        btns[1].style.backgroundImage = 'none';
+
+        if(typeof afterComplete == 'function') {
+            afterComplete();
+        }
     }
 
     TaskManager.prototype.sortTasks = function () {
