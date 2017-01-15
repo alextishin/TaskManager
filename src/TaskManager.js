@@ -245,8 +245,6 @@
 
         if (typeof(localStorage) != "undefined") {
             localStorage.setItem('tasks', JSON.stringify(self._tasks));
-        } else {
-            alert("Sorry, your browser does not support Web Storage...");
         }
     }
 
