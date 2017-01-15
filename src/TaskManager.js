@@ -155,7 +155,7 @@
         title.style.display = 'none';
 
         input.className = 'task-manager__input task-manager__input--edit'
-        input.value = title.innerText;
+        input.value = title.textContent;
 
         btn.className = 'task__btn task__btn--save';
         btn.addEventListener('click', function () {
@@ -171,8 +171,8 @@
         editContainter.appendChild(input);
         editContainter.appendChild(btn);
 
-        //нужен полифил
-        item.prepend(editContainter);
+
+        item.insertAdjacentElement('afterBegin', editContainter);
     }
 
     TaskManager.prototype.removeTask = function (id, item) {
@@ -211,7 +211,7 @@
         }
 
         itemsArray.sort(function (a,b) {
-            return a.innerText.toLowerCase() > b.innerText.toLowerCase();
+            return a.textContent.toLowerCase() > b.textContent.toLowerCase();
         });
 
         for (var i = 0, length = items.length; i < length; i++)  {
