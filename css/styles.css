@@ -38,6 +38,7 @@ body {
 }
 
 .task-manager__btn[disabled] {
+    cursor: not-allowed;
     background: #9e9c9c;
 }
 
@@ -67,6 +68,10 @@ body {
     width: 400px;
     display: table-cell;
     vertical-align: middle;
+}
+
+.task__btn[disabled] {
+    cursor: not-allowed;
 }
 
 .task__btn:focus {

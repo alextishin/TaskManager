@@ -127,7 +127,17 @@
         });
 
         editBtn.addEventListener('click', function () {
-            self.editTask(taskItem.id, taskNode);
+
+            completeBtn.setAttribute('disabled', 'disabled');
+            editBtn.setAttribute('disabled', 'disabled');
+            removeBtn.setAttribute('disabled', 'disabled');
+
+            self.editTask(taskItem.id, taskNode, function () {
+                completeBtn.removeAttribute('disabled');
+                editBtn.removeAttribute('disabled');
+                removeBtn.removeAttribute('disabled');
+            });
+
         })
 
         removeBtn.addEventListener('click', function () {
@@ -150,7 +160,7 @@
         }
     }
 
-    TaskManager.prototype.editTask = function (id, item) {
+    TaskManager.prototype.editTask = function (id, item, onAfterEdit) {
         var self = this;
         var title = item.querySelector('span');
         var editContainter = document.createElement('DIV');
@@ -166,9 +176,10 @@
 
         btn.className = 'task__btn task__btn--save';
         btn.addEventListener('click', function () {
+
             var value = input.value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-            if(!self.compareTitle(value)) {
+            if(value == title.textContent || !self.compareTitle(value)) {
                 title.innerHTML = value;
                 title.style.display = 'table-cell';
                 item.removeChild(editContainter);
@@ -176,6 +187,10 @@
                 self._tasks[id].title = value;
                 self.sortTasks();
                 self.updateStore();
+
+                if(typeof onAfterEdit == 'function') {
+                    onAfterEdit();
+                }
             } else {
                 alert('Task "'+value+'" are exist!');
             }
@@ -186,6 +201,8 @@
 
 
         item.insertAdjacentElement('afterBegin', editContainter);
+
+
     }
 
     TaskManager.prototype.removeTask = function (id, item) {
