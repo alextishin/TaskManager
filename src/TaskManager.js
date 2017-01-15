@@ -50,20 +50,27 @@
         btn.addEventListener('click', function () {
             var id = new Date().valueOf();
             var value = input.value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            var item = {id: id, title: value, isCompleted: false};
+
+            if(!self.compareTitle(value)) {
+                var item = {id: id, title: value, isCompleted: false};
 
 
-            self.addTask(item, function () {
-                //bug in mozzila
-                if(!self._tasks) self._tasks = {};
+                self.addTask(item, function () {
+                    //bug in mozzila
+                    if(!self._tasks) self._tasks = {};
 
 
-                self._tasks[id] = item;
-                self.updateStore();
-                self.sortTasks();
-                input.value = '';
-                btn.disabled = true;
-            });
+                    self._tasks[id] = item;
+                    self.updateStore();
+                    self.sortTasks();
+                    input.value = '';
+                    btn.disabled = true;
+                });
+            } else {
+                alert('Task "'+value+'" are exist!');
+            }
+
+
         });
 
         form.appendChild(input);
@@ -211,7 +218,11 @@
         }
 
         itemsArray.sort(function (a,b) {
-            return a.textContent.toLowerCase() > b.textContent.toLowerCase();
+            if(a.textContent.toLowerCase() > b.textContent.toLowerCase())
+                return 1;
+            else if (a.textContent.toLowerCase() < b.textContent.toLowerCase())
+                return -1;
+            return 0;
         });
 
         for (var i = 0, length = items.length; i < length; i++)  {
@@ -238,6 +249,22 @@
         } else {
             alert("Sorry, your browser does not support Web Storage...");
         }
+    }
+
+    TaskManager.prototype.compareTitle = function (title) {
+        var self = this;
+        var compared = false;
+
+
+        for(var key in self._tasks) {
+            if(self._tasks[key].title.toLocaleLowerCase() == title.toLowerCase()) {
+                compared = true;
+
+                return compared;
+            }
+        }
+
+        return compared;
     }
 
     TaskManager.prototype.updateStore = function () {
