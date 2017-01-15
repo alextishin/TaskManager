@@ -219,9 +219,9 @@
 
         itemsArray.sort(function (a,b) {
             if(a.textContent.toLowerCase() > b.textContent.toLowerCase())
-                return 1;
-            else if (a.textContent.toLowerCase() < b.textContent.toLowerCase())
                 return -1;
+            else if (a.textContent.toLowerCase() < b.textContent.toLowerCase())
+                return 1;
             return 0;
         });
 
