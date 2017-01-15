@@ -166,13 +166,19 @@
 
         btn.className = 'task__btn task__btn--save';
         btn.addEventListener('click', function () {
-            title.innerHTML = input.value;
-            title.style.display = 'table-cell';
-            item.removeChild(editContainter);
+            var value = input.value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-            self._tasks[id].title = input.value;
-            self.sortTasks();
-            self.updateStore();
+            if(!self.compareTitle(value)) {
+                title.innerHTML = value;
+                title.style.display = 'table-cell';
+                item.removeChild(editContainter);
+
+                self._tasks[id].title = value;
+                self.sortTasks();
+                self.updateStore();
+            } else {
+                alert('Task "'+value+'" are exist!');
+            }
         });
 
         editContainter.appendChild(input);
